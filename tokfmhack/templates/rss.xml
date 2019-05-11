@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" version="2.0">
+<channel>
+<title>{{ channel.title }}</title>
+<link>{{ channel.link }}</link>
+<itunes:author>{{ channel.author }}</itunes:author>
+<itunes:image href="{{ channel.image }}" />
+
+{% for item in channel['items'] %}
+<item>
+    <title>{{ item.title }}</title>
+    <itunes:summary>{{ item.summary }}</itunes:summary>
+    <description>{{ item.description }}</description>
+    <link>{{ item.link }}</link>
+    <enclosure url="{{ item.audio_url }}" type="audio/mpeg" ></enclosure>
+    <pubDate>{{ item.pub_date }}</pubDate>
+    <itunes:author>{{ item.author }}</itunes:author>
+    <guid>{{ item.link }}</guid>
+</item> 
+{% endfor %}
+   
+</channel>
+</rss>
