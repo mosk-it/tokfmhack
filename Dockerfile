@@ -6,6 +6,7 @@ RUN mkdir -p /opt/Tokfmhack/data
 
 COPY ./tokfmhack /opt/Tokfmhack/tokfmhack
 COPY ./requirements.txt /opt/Tokfmhack/requirements.txt
+COPY ./schema.sql /opt/Tokfmhack/schema.sql
 
 RUN apk add  ffmpeg g++ gcc libxslt-dev sqlite --no-cache
 RUN pip install -r /opt/Tokfmhack/requirements.txt
