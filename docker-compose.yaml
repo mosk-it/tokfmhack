@@ -5,7 +5,7 @@ services:
     container_name: "tokfmhack_app"
     restart: unless-stopped
     volumes:
-        - ./:/opt/Tokfmhack
+        - ./data:/opt/Tokfmhack/data
     ports:
         - "8088:5000"
     expose:
