@@ -1,0 +1,14 @@
+version: '3'
+services:
+  app:
+    build: .
+    container_name: "tokfmhack_app"
+    restart: unless-stopped
+    volumes:
+        - ./:/opt/Tokfmhack
+    ports:
+        - "8088:5000"
+    expose:
+      - "80"
+    environment:
+      - APP_DIR=/opt/Tokfmhack
