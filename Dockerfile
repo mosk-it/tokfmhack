@@ -10,6 +10,6 @@ COPY ./schema.sql /opt/Tokfmhack/schema.sql
 
 RUN apk add  ffmpeg g++ gcc libxslt-dev sqlite --no-cache
 RUN pip install -r /opt/Tokfmhack/requirements.txt
-RUN sqlite3 /opt/Tokfmhack/data/programs.db < /opt/Tokfmhack/schema.sql
+RUN sqlite3 /opt/Tokfmhack/data/podcasts.db < /opt/Tokfmhack/schema.sql
 
 ENTRYPOINT ["python", "main.py"]
