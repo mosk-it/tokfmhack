@@ -75,6 +75,13 @@ def get_podcast_info(url):
     session = HTMLSession()
     r = session.get(url)
     title = r.html.find('h1.tok-topwrap__h1', first=True).full_text
+    image = r.html.find('.tok-topwrap__topwrap .tok-topwrap__img img', first=True)
+
+    if 'src' in image.attrs:
+        image_src = image.attrs['src']
+
+
+
 
     info_fields = r.html.find('.tok-topwrap__topwrap .tok-divTableRow')
     author = ''
@@ -84,7 +91,7 @@ def get_podcast_info(url):
         if label.find('Prowadzący') > -1:
             author = field.find('a', first=True).full_text
 
-    return { 'title': title, 'author': author }
+    return { 'title': title, 'author': author, 'image': image_src }
 
 
 

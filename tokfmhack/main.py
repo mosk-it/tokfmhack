@@ -37,6 +37,7 @@ def feed(podcast_id):
             'title': info['title'],
             'link': url,
             'author': info['author'],
+            'image': info['image'],
             }
     
     episodes = tasks.get_podcast_episodes(url)
