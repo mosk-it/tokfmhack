@@ -105,9 +105,9 @@ def add_to_db(url):
     cur = con.cursor()
     cur.execute("select count(*) as count from podcasts where id=?", (program_id,))
     if cur.fetchone()['count'] == 0:
-        cur.execute("""insert into podcasts(id, title, url, author)
-                values (?, ?, ?, ?)""",
-                (program_id, info['title'], url, info['author'],))
+        cur.execute("""insert into podcasts(id, title, url, author, image_url)
+                values (?, ?, ?, ?, ?)""",
+                (program_id, info['title'], url, info['author'], info['author'],))
         con.commit()
 
     cur.close()
