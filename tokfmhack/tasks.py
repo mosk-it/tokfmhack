@@ -4,6 +4,7 @@ import json
 import sys
 import config
 import threading
+import datetime
 
 from dateutil.parser import parse
 from email import utils
@@ -164,10 +165,9 @@ def get_podcast_episodes(url, fast=False):
             ep['author'] = span[-1].full_text.strip()
 
         span = info.find('.tok-podcasts__row--audition-time span')
+        dt = datetime.datetime.strptime(span[0].full_text.strip(), '%d.%m.%Y %H:%M')
 
-        d = parse(span[0].full_text.strip())
-        
-        ep['published'] = utils.formatdate(d.timestamp())
+        ep['published'] = parse(dt.strftime("%Y-%m-%d %H:%M"))
 
         episodes.append(ep)
 
