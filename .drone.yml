@@ -8,5 +8,4 @@ steps:
     - docker build . -t tkfmhack
     - docker save tkfmhack > /images/tkfmhack.tar
   volumes:
-    - "/var/run/docker.sock:/var/run/docker.sock"
     - "/home/admin/images:/images"
