@@ -165,7 +165,15 @@ def get_podcast_episodes(url, fast=False):
             ep['author'] = span[-1].full_text.strip()
 
         span = info.find('.tok-podcasts__row--audition-time span')
-        dt = datetime.datetime.strptime(span[0].full_text.strip(), '%d.%m.%Y %H:%M')
+
+        date_span = span[0].full_text.strip()
+        try:
+            dt = datetime.datetime.strptime(date_span, '%d.%m.%Y %H:%M')
+        except ValueError:
+            now = datetime.datetime.now()
+            hours, minutes = date_span.split(':')
+            fmt = '{}.{}.{} {}:{}'.format(now.day, now.month, now.year, hours, minutes)
+            dt = datetime.datetime.strptime(fmt, '%d.%m.%Y %H:%M')
 
         ep['published'] = parse(dt.strftime("%Y-%m-%d %H:%M"))
 

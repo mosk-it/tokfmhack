@@ -1,4 +1,4 @@
-CREATE TABLE podcasts (
+CREATE TABLE IF NOT EXISTS  podcasts (
   id TEXT PRIMARY KEY,
   url TEXT NOT NULL,
   title TEXT NOT NULL,
