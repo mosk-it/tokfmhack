@@ -5,7 +5,14 @@ steps:
 - name: build
   image: docker
   commands:
-    - docker build . -t tkfmhack
-    - docker save tkfmhack > /images/tkfmhack.tar
+  - docker build . -t tkfmhack
+  - docker save tkfmhack > /images/tkfmhack.tar
   volumes:
-    - "/home/admin/images:/images"
+  - name: out
+    path: /images
+
+volumes:
+- name: out
+  host:
+    path: /home/admin/images
+
