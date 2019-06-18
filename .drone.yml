@@ -10,10 +10,13 @@ steps:
   volumes:
   - name: out
     path: /images
+  - name: docker
+    path: /var/run/docker.sock
 
 volumes:
 - name: out
   host:
     path: /home/admin/images
-
-
+- name: docker
+  host:
+    path: /var/run/docker.sock
