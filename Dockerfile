@@ -1,5 +1,7 @@
 FROM python:3.7.2-alpine
 
+ENV APP_DIR /opt/Tokfmhack
+
 RUN mkdir /opt/Tokfmhack
 WORKDIR /opt/Tokfmhack/tokfmhack
 RUN mkdir -p /opt/Tokfmhack/data

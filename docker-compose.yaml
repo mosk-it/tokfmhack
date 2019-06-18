@@ -8,7 +8,3 @@ services:
         - ./data:/opt/Tokfmhack/data
     ports:
         - "8088:5000"
-    expose:
-      - "80"
-    environment:
-      - APP_DIR=/opt/Tokfmhack
