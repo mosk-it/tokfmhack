@@ -10,6 +10,13 @@ steps:
   volumes:
   - name: docker
     path: /var/run/docker.sock
+  settings:
+    registry: registry.mmskl.net
+    repo: registry.mmskl.net/tkfmh_mmskl_net
+    username:
+      from_secret: registry_username
+    password:
+      from_secret: registry_password
 - name: run
   image: docker/compose
   commands:
@@ -17,13 +24,6 @@ steps:
   volume:
     - /var/run/docker.sock:/var/run/docker.sock
 
-settings:
-  registry: registry.mmskl.net
-  repo: registry.mmskl.net/tkfmh_mmskl_net
-  username:
-    from_secret: registry_username
-  password:
-    from_secret: registry_password
 
 
 
