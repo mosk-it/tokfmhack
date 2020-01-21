@@ -10,12 +10,6 @@ steps:
   volumes:
   - name: docker
     path: /var/run/docker.sock
-  settings:
-  debug: true
-  username:
-    from_secret: registry_username
-  password:
-    from_secret: registry_password
 
 - name: run
   image: docker/compose
@@ -25,6 +19,8 @@ steps:
     - /var/run/docker.sock
 
 
+image_pull_secrets:
+- dockerconfigjson
 
 
 volumes:
