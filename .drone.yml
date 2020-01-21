@@ -17,11 +17,11 @@ steps:
   commands:
     - docker-compose -p tkfmh_mmskl_net up -d
   volumes:
-      - docker:/var/run/docker.sock
-
+    - name: docker_sock
+      path: /var/run/docker.sock
 
 
 volumes:
-- name: docker
+- name: docker_sock
   host:
     path: /var/run/docker.sock
