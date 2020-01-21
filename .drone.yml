@@ -3,14 +3,20 @@ name: default
 
 steps:
 - name: build
-  image: plugins/docker
+  image: docker
   commands:
     - docker build . --tag registry.mmskl.net/tkfmh_mmskl_net
     - docker push registry.mmskl.net/tkfmh_mmskl_net 
   volumes:
   - name: docker
     path: /var/run/docker.sock
-  secrets: [ registry_username, registry_password ]
+  settings:
+  debug: true
+  username:
+    from_secret: registry_username
+  password:
+    from_secret: registry_password
+
 - name: run
   image: docker/compose
   commands:
