@@ -18,7 +18,8 @@ steps:
     - /var/run/docker.sock:/var/run/docker.sock
 
 settings:
-  repo: registry.mmskl.net/tkfmh_mmskl_net
+  registry: registry.mmskl.net
+  repo: tkfmh_mmskl_net
   username:
     from_secret: registry_username
   password:
