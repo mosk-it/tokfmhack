@@ -15,9 +15,9 @@ steps:
 - name: run
   image: docker/compose
   commands:
-    - docker-compose up -d
+    - docker-compose -p tkfmh_mmskl_net up -d
   volume:
-    - /var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock
 
 
 
