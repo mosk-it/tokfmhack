@@ -3,10 +3,10 @@ name: default
 
 steps:
 - name: build
-  image: docker
+  image: plugins/docker
   commands:
     - docker build . --tag registry.mmskl.net/tkfmh_mmskl_net
-    - docker login --username="$${DOCKER_USERNAME}" --password="$${DOCKER_PASSWORD}" registry.mmskl.net
+    # - docker login --username="$${DOCKER_USERNAME}" --password="$${DOCKER_PASSWORD}" registry.mmskl.net
     - docker push registry.mmskl.net/tkfmh_mmskl_net 
   secrets: [ docker_username, docker_password ]
   volumes:
