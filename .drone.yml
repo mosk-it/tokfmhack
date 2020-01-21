@@ -6,7 +6,9 @@ steps:
   image: docker
   commands:
     - docker build . --tag registry.mmskl.net/tkfmh_mmskl_net
+    - docker login -u $${REGISTRY_USERNAME} -p $${REGISTRY_PASSWORD} registry.mmskl.net
     - docker push registry.mmskl.net/tkfmh_mmskl_net 
+  secrets: [ registry_username, registry_password ]
   volumes:
   - name: docker
     path: /var/run/docker.sock
