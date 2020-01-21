@@ -3,7 +3,7 @@ name: default
 
 steps:
 - name: build
-  image: docker
+  image: plugins/docker
   commands:
     - docker build . --tag registry.mmskl.net/tkfmh_mmskl_net
     - docker push registry.mmskl.net/tkfmh_mmskl_net 
