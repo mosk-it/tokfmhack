@@ -19,7 +19,7 @@ steps:
 
 settings:
   registry: registry.mmskl.net
-  repo: tkfmh_mmskl_net
+  repo: registry.mmskl.net/tkfmh_mmskl_net
   username:
     from_secret: registry_username
   password:
