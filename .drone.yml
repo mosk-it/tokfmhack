@@ -3,9 +3,14 @@ name: default
 
 steps:
 - name: build
-  image: plugins/docker
+  image: docker
   commands:
     - docker build . --tag registry.mmskl.net/tkfmh_mmskl_net
+    environment:
+      - DEBUG=false
+
+- name: push
+  image: plugins/docker
   settings:
     username:
       from_secret: docker_username
