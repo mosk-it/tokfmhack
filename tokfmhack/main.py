@@ -60,7 +60,11 @@ def feed(podcast_id):
             })
 
     channel['items'] = items
-    return render_template('rss.xml', channel=channel)
+
+    response = render_template('rss.xml', channel=channel)
+    response.headers['Content-type'] = 'text/xml; charset=utf-8'
+
+    return response
 
 
 @app.route('/download/<podcast>', methods=['GET'])
