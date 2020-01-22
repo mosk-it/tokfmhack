@@ -7,7 +7,7 @@ steps:
   commands:
     - docker build . --tag registry.mmskl.net/tkfmh_mmskl_net
   environment:
-    - DEBUG=false
+    DEBUG: false
 
 - name: push
   image: plugins/docker
