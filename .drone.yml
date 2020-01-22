@@ -4,6 +4,8 @@ name: default
 steps:
 - name: build
   image: plugins/docker
+  commands:
+    - docker build . --tag registry.mmskl.net/tkfmh_mmskl_net
   settings:
     username:
       from_secret: docker_username
@@ -11,6 +13,8 @@ steps:
       from_secret: docker_password
     repo: registry.mmskl.net/tkfmh_mmskl_net
     registry: registry.mmskl.net
+    environment:
+      - DEBUG=false
 
 - name: run
   image: docker/compose
