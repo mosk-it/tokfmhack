@@ -6,8 +6,8 @@ steps:
   image: docker
   commands:
     - docker build . --tag registry.mmskl.net/tkfmh_mmskl_net
-    environment:
-      - DEBUG=false
+  environment:
+    - DEBUG=false
 
 - name: push
   image: plugins/docker
@@ -18,8 +18,6 @@ steps:
       from_secret: docker_password
     repo: registry.mmskl.net/tkfmh_mmskl_net
     registry: registry.mmskl.net
-    environment:
-      - DEBUG=false
 
 - name: run
   image: docker/compose
