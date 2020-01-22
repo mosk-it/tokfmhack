@@ -6,6 +6,9 @@ steps:
   image: docker
   commands:
     - docker build . --tag registry.mmskl.net/tkfmh_mmskl_net
+  volumes:
+    - name: docker_sock
+      path: /var/run/docker.sock
   environment:
     DEBUG: false
 
