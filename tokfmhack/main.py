@@ -1,5 +1,7 @@
 from flask import request, render_template, Flask, redirect, url_for, send_file
 from re import match
+from os import getenv
+
 import sys
 import threading
 
@@ -71,4 +73,4 @@ def download(podcast):
     return send_file(open(file_path, 'rb'), mimetype='application/octet-stream')
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=getenv("DEBUG", True))
