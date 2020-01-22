@@ -34,12 +34,11 @@ def feed(podcast_id):
     url = 'https://audycje.tokfm.pl/audycja/{}'.format(podcast_id)
     info = tasks.get_podcast_info(url)
 
-
     channel = {
             'title': info['title'],
             'link': url,
             'author': info['author'],
-            'image': info['image'],
+            'image': tasks.get_full_image_url(info['image_url']) ,
             }
     
     episodes = tasks.get_podcast_episodes(url)
@@ -74,6 +73,14 @@ def download(podcast):
 
     response.headers.add('content-length', str(path.getsize(file_path)))
     return response
+
+@app.route('/image/<image_id>')
+def get_image(image_id):
+
+    filepath = '{}/data/{}'.format(getenv('APP_DIR'), image_id)
+
+    return send_file(filepath, mimetype='image/jpeg')
+
 
 
 if __name__ == '__main__':

@@ -9,6 +9,10 @@ import datetime
 from dateutil.parser import parse
 from email import utils
 
+from uuid import uuid4
+from PIL import Image, ImageFont, ImageDraw
+
+
 from requests_html import HTMLSession
 
 
@@ -67,21 +71,23 @@ def get_podcast_info(url):
 
     con = config.get_db()
     cur = con.cursor()
-    rowcount = cur.execute("""select title, author from podcasts where url=?""",
-            (url,)).rowcount
+    row = cur.execute("""select title, author, image_url from
+            podcasts""").fetchone()
 
-    if rowcount > 0:
-        return cur.fetchone()
+    if row is not None:
+        return row
 
     session = HTMLSession()
     r = session.get(url)
     title = r.html.find('h1.tok-topwrap__h1', first=True).full_text
     image = r.html.find('.tok-topwrap__topwrap .tok-topwrap__img img', first=True)
 
+    image_src = ''
+
     if 'src' in image.attrs:
         image_src = image.attrs['data-src']
 
-
+    image_file = make_podcast_image(image_src, title)
 
 
     info_fields = r.html.find('.tok-topwrap__topwrap .tok-divTableRow')
@@ -92,7 +98,7 @@ def get_podcast_info(url):
         if label.find('Prowadzący') > -1:
             author = field.find('a', first=True).full_text
 
-    return { 'title': title, 'author': author, 'image': image_src }
+    return { 'title': title, 'author': author, 'image_url': image_file }
 
 
 
@@ -108,7 +114,7 @@ def add_to_db(url):
     if cur.fetchone()['count'] == 0:
         cur.execute("""insert into podcasts(id, title, url, author, image_url)
                 values (?, ?, ?, ?, ?)""",
-                (program_id, info['title'], url, info['author'], info['author'],))
+                (program_id, info['title'], url, info['author'], info['image_url'],))
         con.commit()
 
     cur.close()
@@ -180,3 +186,51 @@ def get_podcast_episodes(url, fast=False):
         episodes.append(ep)
 
     return episodes
+
+
+def make_podcast_image(img_url, text):
+
+    r = requests.get(img_url, allow_redirects=True)
+    extension = img_url.split('.')[-1]
+    filename = "{}.{}".format(str(uuid4()), extension)
+    filepath = '{}/data/{}'.format(environ['APP_DIR'], filename)
+
+    open(filepath, 'wb').write(r.content)
+
+    img = Image.open(filepath)
+    draw = ImageDraw.Draw(img)
+    font = ImageFont.truetype("./LiberationMono-Bold.ttf", 60)
+
+    size = 68
+
+    split_by = 7
+    parts = [text[i: i + split_by].strip() for i in range(0, len(text), split_by)]
+
+
+    shadowcolor=(60,60,60)
+    textcolor=(230,230,230)
+
+    thickness = 3
+
+    for i, part in enumerate(parts):
+        x = 0
+        y = i*size*0.75
+        draw.text((x-thickness, y), part, font=font, fill=shadowcolor)
+        draw.text((x+thickness, y), part, font=font, fill=shadowcolor)
+        draw.text((x, y-thickness), part, font=font, fill=shadowcolor)
+        draw.text((x, y+thickness), part, font=font, fill=shadowcolor)
+        #
+        draw.text((x-thickness, y-thickness), part, font=font, fill=shadowcolor)
+        draw.text((x+thickness, y-thickness), part, font=font, fill=shadowcolor)
+        draw.text((x-thickness, y+thickness), part, font=font, fill=shadowcolor)
+        draw.text((x+thickness, y+thickness), part, font=font, fill=shadowcolor)
+        #
+        draw.text((x, y), part, font=font, fill=textcolor)
+
+
+    img.save(filepath)
+
+    return filename
+
+def get_full_image_url(img_id):
+    return config.get_app_url() + '/image/' + img_id
