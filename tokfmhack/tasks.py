@@ -79,7 +79,7 @@ def get_podcast_info(url):
     image = r.html.find('.tok-topwrap__topwrap .tok-topwrap__img img', first=True)
 
     if 'src' in image.attrs:
-        image_src = image.attrs['src']
+        image_src = image.attrs['data-src']
 
 
 
