@@ -10,8 +10,10 @@ COPY ./tokfmhack /opt/Tokfmhack/tokfmhack
 COPY ./requirements.txt /opt/Tokfmhack/requirements.txt
 COPY ./schema.sql /opt/Tokfmhack/schema.sql
 
-RUN apk add  ffmpeg g++ gcc libxslt-dev sqlite --no-cache
-RUN pip install -r /opt/Tokfmhack/requirements.txt
+RUN apk add  ffmpeg g++ gcc libxslt-dev sqlite --no-cache jpeg zlib jpeg-dev zlib-dev build-base freetype freetype-dev && \
+    pip install -r /opt/Tokfmhack/requirements.txt && \
+    apk del libxslt-dev jpeg-dev zlib-dev freetype-dev build-base
+
 RUN sqlite3 /opt/Tokfmhack/data/podcasts.db < /opt/Tokfmhack/schema.sql
 
 ENTRYPOINT ["python", "main.py"]
