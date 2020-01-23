@@ -23,7 +23,7 @@ steps:
   commands:
     - docker-compose -p tkfmh_mmskl_net up -d
   environment:
-    APP_URL: "https://tkfmh.mmskl.net/"
+    APP_URL: "https://tkfmh.mmskl.net"
   volumes:
     - name: docker_sock
       path: /var/run/docker.sock

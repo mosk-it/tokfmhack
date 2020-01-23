@@ -9,7 +9,7 @@ DB_PATH = '{}/data/podcasts.db'.format(environ['APP_DIR'])
 
 def get_app_url():
     if 'APP_URL' in environ:
-        return environ['APP_URL']
+        return environ['APP_URL'].rstrip('/')
 
     return 'http://localhost:5000'
 
