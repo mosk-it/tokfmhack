@@ -6,9 +6,14 @@ steps:
   image: plugins/docker
   commands:
     - docker build . --tag registry.mmskl.net/tkfmh_mmskl_net
+    - echo "$$DOCKER_PASSWORD" | docker login --username "$$DOCKER_USER" --password-stdin
     - docker push registry.mmskl.net/tkfmh_mmskl_net
   environment:
     DEBUG: false
+    DOCKER_USER:
+      from_secret: docker_username
+    DOCKER_PASSWORD:
+      from_secret: docker_password
   volumes:
     - name: docker_sock
       path: /var/run/docker.sock
