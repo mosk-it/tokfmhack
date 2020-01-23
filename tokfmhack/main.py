@@ -1,4 +1,5 @@
-from flask import request, render_template, Flask, redirect, url_for, send_file
+from flask import request, render_template, Flask, redirect, url_for, send_file, make_response
+
 from re import match
 from os import getenv, path
 
@@ -61,10 +62,12 @@ def feed(podcast_id):
 
     channel['items'] = items
 
-    response = render_template('rss.xml', channel=channel)
-    response.headers['Content-type'] = 'text/xml; charset=utf-8'
+    response = make_response(render_template('rss.xml', channel=channel))
 
+    response.headers.set('Content-type', "text/xml; charset=utf-8")
     return response
+
+    return 
 
 
 @app.route('/download/<podcast>', methods=['GET'])
