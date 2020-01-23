@@ -6,7 +6,7 @@ steps:
   image: plugins/docker
   commands:
     - docker build . --tag registry.mmskl.net/tkfmh_mmskl_net
-    - echo "$$DOCKER_PASSWORD" | docker login --username "$$DOCKER_USER" --password-stdin
+    - echo "$$DOCKER_PASSWORD" | docker login --username "$$DOCKER_USER" --password-stdin registry.mmskl.net
     - docker push registry.mmskl.net/tkfmh_mmskl_net
   environment:
     DEBUG: false
