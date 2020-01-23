@@ -2,8 +2,8 @@ kind: pipeline
 name: default
 
 steps:
-- name: push
-  image: plugins/docker
+- name: build
+  image: docker
   commands:
     - docker build . --tag registry.mmskl.net/tkfmh_mmskl_net
     - echo "$$DOCKER_PASSWORD" | docker login --username "$$DOCKER_USER" --password-stdin registry.mmskl.net
@@ -17,16 +17,6 @@ steps:
   volumes:
     - name: docker_sock
       path: /var/run/docker.sock
-
-  settings:
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
-    repo: registry.mmskl.net/tkfmh_mmskl_net
-    registry: registry.mmskl.net
-    purge: false
-    dry_run: false
 
 - name: run
   image: docker/compose
