@@ -20,6 +20,7 @@ steps:
     repo: registry.mmskl.net/tkfmh_mmskl_net
     registry: registry.mmskl.net
     purge: false
+    dry_run: false
 
 - name: run
   image: docker/compose
