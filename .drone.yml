@@ -6,6 +6,7 @@ steps:
   image: plugins/docker
   commands:
     - docker build . --tag registry.mmskl.net/tkfmh_mmskl_net
+    - docker push registry.mmskl.net/tkfmh_mmskl_net
   environment:
     DEBUG: false
   volumes:
