@@ -72,7 +72,7 @@ def get_podcast_info(url):
     con = config.get_db()
     cur = con.cursor()
     row = cur.execute("""select title, author, image_url from
-            podcasts""").fetchone()
+            podcasts where url=?""", (url,)).fetchone()
 
     if row is not None:
         return row
