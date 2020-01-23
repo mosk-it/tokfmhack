@@ -5,11 +5,12 @@ services:
     container_name: "tokfmhack_app"
     restart: unless-stopped
     volumes:
-        - tkfmhack_volume:/opt/Tokfmhack/data
+      - tkfmhack_volume:/opt/Tokfmhack/data
     ports:
-        - "8088:5000"
+      - "8088:5000"
     environment:
-     - DEBUG=false
+      DEBUG: false
+      APP_DIR: "/opt/Tokfmhack"
 
 volumes:
   tkfmhack_volume:
