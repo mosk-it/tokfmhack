@@ -9,7 +9,7 @@ steps:
     - echo "$$DOCKER_PASSWORD" | docker login --username "$$DOCKER_USER" --password-stdin registry.mmskl.net
     - docker push registry.mmskl.net/tkfmh_mmskl_net
   environment:
-    DEBUG: false
+    DEBUG: 0
     DOCKER_USER:
       from_secret: docker_username
     DOCKER_PASSWORD:

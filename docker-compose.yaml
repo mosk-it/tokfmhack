@@ -9,7 +9,7 @@ services:
     ports:
       - "8088:5000"
     environment:
-      DEBUG: false
+      DEBUG: 0
       APP_DIR: "/opt/Tokfmhack"
       APP_URL: ${APP_URL}
 
