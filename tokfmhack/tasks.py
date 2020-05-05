@@ -8,6 +8,8 @@ import datetime
 
 from dateutil.parser import parse
 from email import utils
+import time
+
 
 from uuid import uuid4
 from PIL import Image, ImageFont, ImageDraw
@@ -181,7 +183,8 @@ def get_podcast_episodes(url, fast=False):
             fmt = '{}.{}.{} {}:{}'.format(now.day, now.month, now.year, hours, minutes)
             dt = datetime.datetime.strptime(fmt, '%d.%m.%Y %H:%M')
 
-        ep['published'] = parse(dt.strftime("%Y-%m-%d %H:%M"))
+
+        ep['published'] = utils.formatdate(time.mktime(dt.timetuple()))
 
         episodes.append(ep)
 
