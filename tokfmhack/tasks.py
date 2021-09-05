@@ -43,7 +43,7 @@ def download_podcast(podcast_id):
         pid, title = data.split(',')
         body = json.dumps({"pid": pid, "st": "tokfm"})
 
-        r = requests.post("https://audycje.tokfm.pl/gets", data=body)
+        r = requests.post("https://audycje.tokfm.pl/gets?disableRedirect=true", data=body)
         data = json.loads(r.text)
 
         r = requests.get(data["url"], allow_redirects=True)
