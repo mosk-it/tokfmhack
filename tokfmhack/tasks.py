@@ -143,7 +143,11 @@ def get_podcast_episodes(url, fast=False):
 
     #'tok-podcasts__row--time'
 
-    blocks = r.html.find('.tok-podcasts', first=True).find('.tok-podcasts__podcast')
+    blocks = r.html.find('.tok-podcasts .tok-podcasts__podcast')
+
+    if not blocks:
+        blocks = r.html.find('.lpp_podcast .lpp_podcast')
+
     episodes = []
 
     for block in blocks:
