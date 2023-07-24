@@ -3,6 +3,10 @@
 Skrypt służy do stworzenia kanałów rss z audycji rss, w celu odsłuchiwania ich w ulubionym odtwarzaczu.
 Mimo, że konto nie jest potrzebne do uruchomienia aplikacji, zakładam, że posiadasz dostęp premium.
 
+Na tej samej zasadzie działania został stworzony prosty skrypt JS który umożliwia pobieranie konkretnych odcinków:
+
+[link to gist](https://gist.github.com/mmskl/ddbf8ff85282259190525601ea366c3f)
+
 ## docker-compose
 
 ```
