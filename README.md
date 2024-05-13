@@ -1,3 +1,5 @@
+The content following this section is in Polish, as it pertains to a script designed for retrieving Polish radio podcasts from TOKFM
+
 # Stwórz rss z audycji radia Tokfm
 
 Skrypt służy do stworzenia kanałów rss z audycji rss, w celu odsłuchiwania ich w ulubionym odtwarzaczu.
