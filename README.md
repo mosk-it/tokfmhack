@@ -7,7 +7,7 @@ Mimo, że konto nie jest potrzebne do uruchomienia aplikacji, zakładam, że pos
 
 Na tej samej zasadzie działania został stworzony prosty skrypt JS który umożliwia pobieranie konkretnych odcinków:
 
-[link to gist](https://gist.github.com/mmskl/ddbf8ff85282259190525601ea366c3f)
+[link to gist](https://gist.github.com/mosk-it/ddbf8ff85282259190525601ea366c3f)
 
 ## docker-compose
 
