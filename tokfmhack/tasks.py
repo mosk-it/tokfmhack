@@ -1,10 +1,12 @@
 from os import path, environ
+from re import sub
 import requests
 import json
 import sys
 import config
 import threading
 import datetime
+
 
 from dateutil.parser import parse
 from email import utils
@@ -79,30 +81,35 @@ def get_podcast_info(url):
     if row is not None:
         return row
 
-    session = HTMLSession()
-    r = session.get(url)
-    title = r.html.find('h1.tok-topwrap__h1', first=True).full_text
-    image = r.html.find('.tok-topwrap__topwrap .tok-topwrap__img img', first=True)
+    info_fields = get_extracted_context_from_html(url)
 
-    image_src = ''
-
-    if 'src' in image.attrs:
-        image_src = image.attrs['data-src']
+    title = info_fields['name']
+    image_src = info_fields['image']
+    author = info_fields['author']['name']
 
     image_file = make_podcast_image(image_src, title)
 
-
-    info_fields = r.html.find('.tok-topwrap__topwrap .tok-divTableRow')
-    author = ''
-
-    for i, field in enumerate(info_fields):
-        label = field.find('.tok-topwrap__label', first=True).full_text
-        if label.find('Prowadzący') > -1:
-            author = field.find('a', first=True).full_text
-
-    return { 'title': title, 'author': author, 'image_url': image_file }
+    return {
+        'title': title,
+        'author': author,
+        'image_url': image_file,
+        'description': info_fields['description']
+    }
 
 
+def get_extracted_context_from_html(url):
+    """get script tag that holds all required info and parse it
+    also, clean data a bit
+    """
+
+    res = requests.get(url)
+    ob = json.loads(
+        res.text.split('type="application/ld+json">')[1].split('</script')[0]
+    );
+    ob['name'] = ob['name'].replace(' - słuchaj podcastów TOKFM', '')
+    ob['name'] = ob['name'].replace('Audycja: ', '')
+
+    return ob
 
 def add_to_db(url):
 
@@ -116,7 +123,7 @@ def add_to_db(url):
     if cur.fetchone()['count'] == 0:
         cur.execute("""insert into podcasts(id, title, url, author, image_url)
                 values (?, ?, ?, ?, ?)""",
-                (program_id, info['title'], url, info['author'], info['image_url'],))
+                (program_id, info['title'], url, info['author'], info['image_url']))
         con.commit()
 
     cur.close()
@@ -143,42 +150,33 @@ def get_podcast_episodes(url, fast=False):
 
     #'tok-podcasts__row--time'
 
-    blocks = r.html.find('.tok-podcasts .tok-podcasts__podcast')
-
-    if not blocks:
-        blocks = r.html.find('.lpp_podcast .lpp_podcast')
-
+    blocks = r.html.find('.tok-podcasts', first=True).find('.tok-podcasts__podcast')
     episodes = []
 
     for block in blocks:
         ep = {}
 
-        info = block.find('.tok-podcasts__item--name', first=True)
+        info = block.find('.text-base.text-primary.font-medium a', first=True)
 
-        ep['link'] = info.find('.tok-podcasts__row--name a', first=True).attrs['href']
+        ep['link'] = info.attrs['href']
 
         if fast:
             episodes.append(ep)
             continue
 
 
+
+
         download_url = '{}/download/{}'.format(config.get_app_url(),
                 format_filename(ep['link'], no_extension=True))
 
         ep['audio_url'] = download_url
-        ep['title'] = info.find('.tok-podcasts__row--name a',
-                first=True).full_text.strip()
+        ep['title'] = info.full_text.strip()
+        authors = block.find('.tok-podcasts__row--audition-leaders', first=True).full_text
 
-        span = info.find('.tok-podcasts__row--time span a')
+        ep['author'] = sub('[\n\s]{2,}', ' ', authors.strip()) # remove doubled spaces inside text
 
-        ep['author'] = ''
-
-        if len(span) > 0:
-            ep['author'] = span[-1].full_text.strip()
-
-        span = info.find('.tok-podcasts__row--audition-time span')
-
-        date_span = span[0].full_text.strip()
+        date_span = block.find('.items-center .text-primary-dark-gray.text-sm', first=True).full_text.strip()
         try:
             dt = datetime.datetime.strptime(date_span, '%d.%m.%Y %H:%M')
         except ValueError:
@@ -197,7 +195,10 @@ def get_podcast_episodes(url, fast=False):
 
 def make_podcast_image(img_url, text):
 
+    img_url = get_square_img_url_if_possible(img_url)
+
     r = requests.get(img_url, allow_redirects=True)
+
     extension = img_url.split('.')[-1]
     filename = "{}.{}".format(str(uuid4()), extension)
     filepath = '{}/data/{}'.format(environ['APP_DIR'], filename)
@@ -238,6 +239,35 @@ def make_podcast_image(img_url, text):
     img.save(filepath)
 
     return filename
+
+"""
+checks if square version of image exists and returns its url if so
+"""
+def get_square_img_url_if_possible(url):
+   try:
+       base_url = url.split('?')[0]
+       parts = base_url.split('/')
+
+       if not parts or len(parts) < 2 or '_img' not in parts:
+           return url
+
+       name_parts = parts[-1].rsplit('.', 1)
+       if len(name_parts) != 2:
+           return url
+
+       number = name_parts[0].split('_')[0]
+       parts[-1] = f"{number}square_300.{name_parts[1]}"
+       new_url = '/'.join(parts)
+
+       response = requests.head(new_url)
+       return new_url if response.status_code == 200 else url
+   except:
+       return url
+
+
+
+
+
 
 def get_full_image_url(img_id):
     return config.get_app_url() + '/image/' + img_id
